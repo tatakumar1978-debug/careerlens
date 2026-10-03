@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareerLens | Resume Analyzer &amp; Career Recommendation System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="bubbles"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="masthead-inner">
+    <div class="masthead-title">
+     <h1>CareerLens</h1>
+      <p class="subtitle">Resume Analyzer &amp; Career Recommendation System &mdash; upload your resume, find your skill gaps, and get a clear path to the right role.</p>
+    </div>
+    <div class="masthead-stack">
+      <span>Java</span><span>Spring Boot</span><span>SQL</span>
+    </div>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- LEFT: form -->
+  <section class="panel intake" aria-label="Candidate details">
+
+    <!-- illustration: resume + magnifying glass -->
+    <svg class="form-art" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="gPaper" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#6366f1"/>
+          <stop offset="1" stop-color="#c026d3"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="160" cy="96" rx="140" ry="76" fill="#e0e7ff" opacity="0.75"/>
+      <g class="float">
+        <rect x="78" y="14" width="116" height="148" rx="10" fill="#fff" stroke="#c7d2fe" stroke-width="2"/>
+        <circle cx="106" cy="46" r="13" fill="url(#gPaper)"/>
+        <rect x="127" y="36" width="52" height="7" rx="3.5" fill="#4f46e5"/>
+        <rect x="127" y="49" width="36" height="6" rx="3" fill="#c7d2fe"/>
+        <rect x="92" y="76" width="88" height="6" rx="3" fill="#e0e7ff"/>
+        <rect x="92" y="90" width="76" height="6" rx="3" fill="#a5b4fc"/>
+        <rect x="92" y="104" width="88" height="6" rx="3" fill="#e0e7ff"/>
+        <rect x="92" y="124" width="48" height="8" rx="4" fill="#34d399"/>
+        <rect x="92" y="138" width="64" height="8" rx="4" fill="#818cf8"/>
+      </g>
+      <g class="float2">
+        <circle cx="205" cy="98" r="30" fill="#fff" fill-opacity="0.55" stroke="#7c3aed" stroke-width="7"/>
+        <line x1="227" y1="120" x2="254" y2="148" stroke="#7c3aed" stroke-width="10" stroke-linecap="round"/>
+      </g>
+      <circle cx="252" cy="40" r="17" fill="#10b981"/>
+      <path d="M244 40 l6 6 l11 -12" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="22" y="62" width="48" height="22" rx="11" fill="#ede9fe"/>
+      <text x="46" y="77" text-anchor="middle" font-size="11" font-weight="600" fill="#5b21b6" font-family="Poppins, Arial, sans-serif">Java</text>
+      <rect x="24" y="102" width="42" height="22" rx="11" fill="#d1fae5"/>
+      <text x="45" y="117" text-anchor="middle" font-size="11" font-weight="600" fill="#047857" font-family="Poppins, Arial, sans-serif">SQL</text>
+    </svg>
+
+    <h2>Tell us about the candidate</h2>
+    <p class="intro">Fill in the details and we will find the skill gap.</p>
+
+    <form id="analyzeForm">
+      <label for="name">&#128100; Full name</label>
+      <input type="text" id="name" name="name" placeholder="Anjali Menon" required>
+
+      <label for="email">&#9993;&#65039; Email</label>
+      <input type="email" id="email" name="email" placeholder="anjali@example.com">
+
+      <label for="role">&#127919; Target role</label>
+      <select id="role" name="role" required>
+        <option value="" disabled selected>Loading roles&hellip;</option>
+      </select>
+
+      <label>&#128206; Upload resume (optional)</label>
+      <div class="upload-box">
+        <input type="file" id="resumeFile" accept=".pdf,.txt" hidden>
+        <button type="button" id="uploadBtn" class="upload-btn">Choose PDF or TXT file</button>
+        <span id="uploadStatus" class="upload-status">No file chosen</span>
+      </div>
+
+      <label for="skills">&#128736;&#65039; Current skills</label>
+      <input type="text" id="skills" name="skills" placeholder="Java, HTML, CSS, Git" required>
+      <p class="hint">Comma-separated. Matched against the required skills for the role you picked.</p>
+
+      <button type="submit" id="submitBtn">Generate report</button>
+    </form>
+
+    <div id="roleReference" class="role-reference" hidden>
+      <p class="role-reference-label">Required for this role</p>
+      <ul id="roleSkillsList"></ul>
+    </div>
+  </section>
+
+  <!-- RIGHT: report -->
+  <section class="panel report-wrap" aria-label="Career analysis report">
+    <div class="report-sheet" id="reportSheet">
+
+      <div class="report-empty" id="reportEmpty">
+
+        <!-- illustration: growing chart -->
+        <svg class="empty-art" viewBox="0 0 260 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="gBar" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#6366f1"/>
+              <stop offset="1" stop-color="#c026d3"/>
+            </linearGradient>
+          </defs>
+          <ellipse cx="130" cy="102" rx="120" ry="76" fill="#ede9fe" opacity="0.8"/>
+          <rect x="30" y="22" width="200" height="140" rx="14" fill="#fff" stroke="#ddd6fe" stroke-width="2"/>
+          <rect class="bar" style="animation-delay:0.1s" x="50"  y="116" width="26" height="30" rx="5" fill="url(#gBar)"/>
+          <rect class="bar" style="animation-delay:0.3s" x="88"  y="96"  width="26" height="50" rx="5" fill="url(#gBar)"/>
+          <rect class="bar" style="animation-delay:0.5s" x="126" y="72"  width="26" height="74" rx="5" fill="url(#gBar)"/>
+          <rect class="bar" style="animation-delay:0.7s" x="164" y="48"  width="26" height="98" rx="5" fill="url(#gBar)"/>
+          <polyline points="63,104 101,84 139,60 177,36" fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="177" cy="36" r="9" fill="#10b981"/>
+          <path d="M172.5 36 l3.5 3.5 l6 -7" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="44" y="152" width="172" height="3" rx="1.5" fill="#e9e5ff"/>
+        </svg>
+
+        <p>No report generated yet.</p>
+        <p class="report-empty-sub">Fill in the form and choose &ldquo;Generate report&rdquo; &mdash; the compatibility score, matched skills and recommendation will show here.</p>
+      </div>
+
+      <div class="report-content" id="reportContent" hidden>
+        <p class="report-kicker" id="reportCategory">Technical</p>
+        <h3 id="reportRole">Software Developer</h3>
+        <p class="report-for">for <span id="reportName">&mdash;</span></p>
+
+        <div class="score-row">
+          <div class="score-number"><span id="scoreValue">0</span><span class="score-percent">%</span></div>
+          <div class="score-bar-track">
+            <div class="score-bar-fill" id="scoreBarFill"></div>
+          </div>
+          <p class="score-caption">skill compatibility</p>
+        </div>
+
+        <div class="skill-columns">
+          <div>
+            <p class="skill-col-label matched">Matched</p>
+            <ul class="chip-list" id="matchedList"></ul>
+          </div>
+          <div>
+            <p class="skill-col-label missing">Missing</p>
+            <ul class="chip-list" id="missingList"></ul>
+          </div>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-titlebar">CareerReport.java &mdash; output</div>
+          <pre id="terminalText"></pre>
+        </div>
+      </div>
+
+      <div class="report-error" id="reportError" hidden></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Built with Java, Spring Boot, SQL, HTML, CSS and JavaScript.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
